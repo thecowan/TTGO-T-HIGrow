@@ -14,9 +14,8 @@ SENSORS_FILE = "sensors/sensors.yaml"
 
 # Write data to YAML file
 def write_yaml_file(mac_id,  name):
-    print("in write_yaml_file")
+    print("Writing newly-discovered sensor " + mac_id + " to yaml file")
     sensors = dict()
-#    print("after dict")
     sensors['mac_id'] = mac_id
     sensors['name'] = name
 
@@ -25,18 +24,13 @@ def write_yaml_file(mac_id,  name):
 
 # Read data from YAML file
 def read_yaml_file(mac_id,  name):
-#    global mac_id_found,  data
-    print('in read_yaml')
+    print('Checking YAML file for previously-discovered sensor')
     with open(SENSORS_FILE, 'r',  encoding='utf-8') as yaml_file:
-#        print("open sensor file")
         for line in yaml_file:
-#            print("line ",  line)
-            
             line_mac_id_input = line.strip()
             line_mac_id_arr = line_mac_id_input.split(": ")
             line_mac_id = line_mac_id_arr[1]
             if line_mac_id == mac_id:
-#                print("found")
                 mac_id_found = True
                 break
         else:
@@ -51,7 +45,7 @@ def read_yaml_file(mac_id,  name):
 # Send discovery topics
 def send_discovery_topics(msg):
 
-    print("in send_discovery_topics")
+    print("Writing sensor discovery topics for new sensor")
     d = json.loads(msg.payload)
     device_payload = {
         'identifiers': [f"{d['plant']['Tgrow_HIGrow']}"],
@@ -172,7 +166,6 @@ def send_discovery_topics(msg):
             'enabled_by_default': 'false',
         }, 
     }
-    print("1a")
     
     for entity, entity_payload in entity_payloads.items():
         entity_payload['val_tpl'] = f"{{{{ value_json.plant.{entity} }}}}"
@@ -192,21 +185,24 @@ def send_discovery_topics(msg):
         )
 
 def on_connect(client, userdata, flags, rc):
-    print("Connected with result code "+str(rc))
+    print("Connected to MQTT server with result code "+str(rc))
     client.subscribe("Tgrow_HIGrow/#")
 
 def on_message(client, userdata, msg):
-    print("in on_message")
-    print(msg.topic+" "+str(msg.payload))
+    print("Received message on topic " + msg.topic)
+    print("Body: " +str(msg.payload))
     d = json.loads(msg.payload)
     mac_id=d["plant"]["Tgrow_HIGrow"]
     name=d["plant"]["sensorname"]
     yaml_data = read_yaml_file(mac_id,  name)
 
     if yaml_data == False:
+        print("New device discovered; sending discovery topics")
         send_discovery_topics(msg)
+    else:
+        print("Device already sent to discovery; skipping")
         
-    print("back in on_message after write")
+    print("Completed parse of message on " + msg.topic)
 
 # Initialize MQTT client connection
 client = mqtt.Client()
