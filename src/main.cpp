@@ -236,19 +236,19 @@ void setup()
   uint32_t salt = readSalt();
   config.salt = salt;
   String advice;
-  if (salt < 201)
+  if (salt < fertil_needed)
   {
     advice = "needed";
   }
-  else if (salt < 251)
+  else if (salt < fertil_opt)
   {
     advice = "low";
   }
-  else if (salt < 351)
+  else if (salt < fertil_high)
   {
     advice = "optimal";
   }
-  else if (salt > 350)
+  else
   {
     advice = "too high";
   }
