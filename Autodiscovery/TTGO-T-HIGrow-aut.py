@@ -2,6 +2,7 @@
 TTGO-HIGrow to MQTT Gateway, release 4.3.1
 '''
 import json
+import os
 import yaml
 import paho.mqtt.client as mqtt
 
@@ -211,7 +212,19 @@ def on_message(client, userdata, msg):
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-#client.username_pw_set("username", "password")
-client.connect("192.168.1.64", 1883, 60)
+
+host = os.environ.get("MQTT_HOST")
+if host is None:
+  print("No MQTT_HOST environment variable specified; using default")
+  host = "192.168.1.64"
+
+username = os.environ.get("MQTT_USER")
+password = os.environ.get("MQTT_PASS")
+if username is None or password is None:
+  print("No MQTT_USER/MQTT_PASS environment variables specified; connecting without authentication")
+else:
+  client.username_pw_set(username, password)
+
+client.connect(host, 1883, 60)
 
 client.loop_forever()
