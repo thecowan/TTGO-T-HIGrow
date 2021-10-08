@@ -92,27 +92,27 @@ def send_discovery_topics(msg):
         'lux': {
             'name': f"{d['plant']['sensorname']} Lux",
             'unit_of_meas': "Lumen", 
-            'icon':'mdi:weather-sunny'
+            'device_class': 'illuminance',
         }, 
         'temp': {
             'name': f"{d['plant']['sensorname']} Temperature",
             'unit_of_meas': "C", 
-            'icon':'mdi:thermometer'
+            'device_class': 'temperature',
         }, 
         'humid': {
             'name': f"{d['plant']['sensorname']} Humidity",
             'unit_of_meas': "%", 
-            'icon':'mdi:water-percent'
+            'device_class': 'humidity',
         }, 
         'soil': {
             'name': f"{d['plant']['sensorname']} Soil",
             'unit_of_meas': "%", 
-            'icon':'mdi:water-percent'
+            'device_class': 'humidity',
         }, 
         'soilTemp': {
             'name': f"{d['plant']['sensorname']} SoilTemp",
             'unit_of_meas': "C", 
-            'icon':'mdi:thermometer'
+            'device_class': 'temperature',
         },
         'salt': {
             'name': f"{d['plant']['sensorname']} Fertilizer",
@@ -127,7 +127,7 @@ def send_discovery_topics(msg):
         'bat': {
             'name': f"{d['plant']['sensorname']} Battery",
             'unit_of_meas': "%", 
-            'icon':'mdi:battery'
+            'device_class': 'battery',
         }, 
         'batcharge': {
             'name': f"{d['plant']['sensorname']} Charging",
@@ -152,7 +152,7 @@ def send_discovery_topics(msg):
         'pressure': {
             'name': f"{d['plant']['sensorname']} Pressure",
             'unit_of_meas': "Hpa", 
-            'icon':'mdi:gauge'
+            'device_class': 'pressure',
         }, 
         'plantValveNo': {
             'name': f"{d['plant']['sensorname']} plantValveNo",
