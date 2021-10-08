@@ -62,11 +62,13 @@ def send_discovery_topics(msg):
     entity_payloads = {
         'Tgrow_HIGrow': {
             'name': f"{d['plant']['sensorname']} Mac-ID",
-            'unit_of_meas': ""
+            'unit_of_meas': "",
+            'enabled_by_default': 'false',
         },
         'sensorname': {
             'name': f"{d['plant']['sensorname']}",
-            'unit_of_meas': ""
+            'unit_of_meas': "",
+            'enabled_by_default': 'false',
         },
         'date': {
             'name': f"{d['plant']['sensorname']} Date",
@@ -82,12 +84,14 @@ def send_discovery_topics(msg):
         'sleep5Count': {
             'name': f"{d['plant']['sensorname']} Sleep5count",
             'unit_of_meas': "", 
-            'icon':'mdi:counter'
+            'icon':'mdi:counter',
+            'enabled_by_default': 'false',
         }, 
         'bootCount': {
             'name': f"{d['plant']['sensorname']} Bootcount",
             'unit_of_meas': "", 
-            'icon':'mdi:counter'
+            'icon':'mdi:counter',
+            'enabled_by_default': 'false',
         }, 
         'lux': {
             'name': f"{d['plant']['sensorname']} Lux",
@@ -147,7 +151,8 @@ def send_discovery_topics(msg):
         'wifissid': {
             'name': f"{d['plant']['sensorname']} WIFI",
             'unit_of_meas': "", 
-            'icon':'mdi:wifi'
+            'icon':'mdi:wifi',
+            'enabled_by_default': 'false',
         }, 
         'pressure': {
             'name': f"{d['plant']['sensorname']} Pressure",
@@ -157,11 +162,13 @@ def send_discovery_topics(msg):
         'plantValveNo': {
             'name': f"{d['plant']['sensorname']} plantValveNo",
             'unit_of_meas': "", 
+            'enabled_by_default': 'false',
         }, 
         'rel': {
             'name': f"{d['plant']['sensorname']} Release",
             'unit_of_meas': "", 
-            'icon':'mdi:counter'
+            'icon':'mdi:counter',
+            'enabled_by_default': 'false',
         }, 
     }
     print("1a")
