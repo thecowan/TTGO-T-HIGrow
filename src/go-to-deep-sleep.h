@@ -7,6 +7,12 @@ void goToDeepSleep()
     writeFile(SPIFFS, "/error.log", "Going to sleep for 10800 seconds \n");
   }
 
+  if (DELAY_ONLY) {
+    Serial.print("(Delaying only, no sleep)");
+    delay(TIME_TO_SLEEP * mS_TO_S_FACTOR);
+    return;
+  }
+
   WiFi.disconnect(true);
   WiFi.mode(WIFI_OFF);
   btStop();
