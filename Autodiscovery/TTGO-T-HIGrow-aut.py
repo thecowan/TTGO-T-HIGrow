@@ -95,12 +95,12 @@ def send_discovery_topics(msg):
         }, 
         'lux': {
             'name': f"{d['plant']['sensorname']} Lux",
-            'unit_of_meas': "Lumen", 
+            'unit_of_meas': "lx", 
             'device_class': 'illuminance',
         }, 
         'temp': {
             'name': f"{d['plant']['sensorname']} Temperature",
-            'unit_of_meas': "C", 
+            'unit_of_meas': "°C",
             'device_class': 'temperature',
         }, 
         'humid': {
@@ -115,7 +115,7 @@ def send_discovery_topics(msg):
         }, 
         'soilTemp': {
             'name': f"{d['plant']['sensorname']} SoilTemp",
-            'unit_of_meas': "C", 
+            'unit_of_meas': "°C",
             'device_class': 'temperature',
         },
         'salt': {
