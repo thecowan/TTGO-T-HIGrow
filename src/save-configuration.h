@@ -19,10 +19,11 @@ void saveConfiguration(const Config & config) {
       chipId = chipId + String(mac[i], HEX);
     }
   }
-  Serial.println("chipId " + chipId);
   const String topicStr = device_name + "/" + chipId;
   const char* topic = topicStr.c_str();
-  Serial.println(topic);
+  Serial.print("Publishing to topic ");
+  Serial.print(topic);
+  Serial.print(" via SSID ");
   Serial.println(ssid);
 
   StaticJsonDocument<1536> doc;

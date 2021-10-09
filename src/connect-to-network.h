@@ -1,6 +1,6 @@
 void connectToNetwork()
 {
-  Serial.print("Size of SSID array ");
+  Serial.print("Size of SSID array: ");
   Serial.println(ssidArrNo);
   const char *Hostname = plant_name.c_str();
   WiFi.mode(WIFI_STA);

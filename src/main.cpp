@@ -132,14 +132,15 @@ void setup()
   // Start WiFi and update time
   connectToNetwork();
   Serial.println(" ");
-  Serial.println("Connected to network");
+  Serial.print("Connected to network with MAC address ");
+  Serial.print(WiFi.macAddress());
+  Serial.print(", got IP address ");
+  Serial.println(WiFi.localIP());
+
   if (logging)
   {
     writeFile(SPIFFS, "/error.log", "Connected to network \n");
   }
-
-  Serial.println(WiFi.macAddress());
-  Serial.println(WiFi.localIP());
 
   while (!timeClient.update())
   {
@@ -168,15 +169,15 @@ void setup()
   bool wireOk = Wire.begin(I2C_SDA, I2C_SCL); // wire can not be initialized at beginng, the bus is busy
   if (wireOk)
   {
-    Serial.println(F("Wire ok"));
+    Serial.println(F("I2C wire initialised OK"));
     if (logging)
     {
-      writeFile(SPIFFS, "/error.log", "Wire Begin OK! \n");
+      writeFile(SPIFFS, "/error.log", "I2C wire initialised OK\n");
     }
   }
   else
   {
-    Serial.println(F("Wire NOK"));
+    Serial.println(F("I2C wire not initialized"));
   }
 
   if (!bmp.begin())
@@ -199,7 +200,7 @@ void setup()
   }
 
   float luxRead = lightMeter.readLightLevel(); // 1st read seems to return 0 always
-  Serial.print("lux ");
+  Serial.print("Initial lux read (expecting 0): ");
   Serial.println(luxRead);
   delay(2000);
 
@@ -248,14 +249,18 @@ void setup()
   {
     advice = "too high";
   }
-  Serial.println(advice);
+  Serial.print("Raw salt reading ");
+  Serial.print(salt);
+  Serial.print("; advice '");
+  Serial.print(advice);
+  Serial.println("'");
   config.saltadvice = advice;
 
   // Battery status, and charging status and days.
   float bat = readBattery();
   config.bat = bat;
   config.batcharge = "";
-  Serial.println("Battery level");
+  Serial.print("Battery level: ");
   Serial.println(bat);
   if (bat > 130)
   {
@@ -270,13 +275,13 @@ void setup()
     config.batchargeDate = config.dateTime;
   }
 
-  Serial.println("Charge Epoc");
+  Serial.print("Charge Epoch: ");
   Serial.println(battChargeEpoc);
   unsigned long epochTime = timeClient.getEpochTime();
-  Serial.println("Test Epoc");
+  Serial.print("Test Epoc: ");
   Serial.println(epochTime);
   epochChargeTime = battChargeEpoc.toInt();
-  Serial.println("first calculation");
+  Serial.print("Seconds since last charge: ");
   Serial.println(epochTime - epochChargeTime);
   float epochTimeFl = float(epochTime);
   float epochChargeTimeFl = float(epochChargeTime); 
@@ -294,7 +299,7 @@ void setup()
   config.bootno = bootCount;
 
   luxRead = lightMeter.readLightLevel();
-  Serial.print("lux ");
+  Serial.print("Lux reading: ");
   Serial.println(luxRead);
   config.lux = luxRead;
   config.rel = rel;
