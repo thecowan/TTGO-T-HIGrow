@@ -25,7 +25,6 @@ const bool USE_18B20_TEMP_SENSOR = false;
 // Soil defaults - change them to your calibration data
 int soil_min = 1535;
 int soil_max = 3300;
-bool calibrate_soil = false;
 
 // Salt/Fertilizer recommandation break points. You can change these according to your own calibration measurements.
 int fertil_needed = 200;
@@ -33,8 +32,7 @@ int fertil_low = 201;
 int fertil_opt = 251;
 int fertil_high = 351;
 
-// Give the sensor a plant name, change to true, upload sketch and then revert to false
-const bool update_plant_name = false;
+// Give the sensor a friendly plant name
 String plant_name = "Padron_1";
 
 //If using the Greenhouse automatic watering repo, then assign a waterValveNo to the plant. 
