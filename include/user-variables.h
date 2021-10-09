@@ -32,7 +32,7 @@ const bool USE_18B20_TEMP_SENSOR = false;
 // You will then repeat the process, with the blade of the sensor submersed in water, to get the lowest ('wettest') reading calibrated also.
 //
 // Typical values might be around 1450-3350 after calibration, but can vary. A safeguard exists where values won't be updated outside 'ridiculous' extremes
-// (500-4000); if you have a decide which actually reports outside this, you'll need to turn auto-calibration off and update soil_min_default and soil_max_default
+// (500-4000); if you have a device which actually reports outside this, you'll need to turn auto-calibration off and update soil_min_default and soil_max_default
 // based on what you observe.
 const bool auto_calibrate = true;
 // Soil defaults - NO NEED TO CHANGE THESE if using auto-calibration
