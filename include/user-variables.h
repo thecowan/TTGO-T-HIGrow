@@ -49,10 +49,11 @@ const char* ntpServer = "pool.ntp.org";
 // Device configuration and name setting
 const String device_name = "Tgrow_HIGrow"; // Can be changed, but not necessary, as it will give no added value.
 
-#define uS_TO_S_FACTOR 1000000ULL //Conversion factor for micro seconds to seconds
-#define mS_TO_S_FACTOR 1000UL     //Conversion factor for milli seconds to seconds
-#define TIME_TO_SLEEP  10800       //Time ESP32 will go to sleep (in seconds)
-#define DELAY_ONLY     false      // If true, device will stay awake, idling between loops. For debugging purposes only: will drain battery!
+#define uS_TO_S_FACTOR 1000000ULL    //Conversion factor for micro seconds to seconds
+#define mS_TO_S_FACTOR 1000UL        //Conversion factor for milli seconds to seconds
+#define TIME_TO_SLEEP  10800         //Time ESP32 will go to sleep (in seconds)
+#define TIME_TO_SLEEP_IF_CHARGING 60 //Time ESP32 will go to sleep (in seconds) when connected to charger
+#define DELAY_ONLY     false         // If true, device will stay awake, idling between loops. For debugging purposes only: will drain battery!
 
 const char broker[] = "192.168.1.64";
 int        port     = 1883;

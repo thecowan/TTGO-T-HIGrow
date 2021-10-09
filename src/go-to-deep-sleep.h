@@ -1,7 +1,11 @@
 void goToDeepSleep()
 {
+  int sleepTime = TIME_TO_SLEEP;
+  if (config.batcharge.equals("charging")) {
+    sleepTime = TIME_TO_SLEEP_IF_CHARGING;
+  }
   Serial.print("Going to sleep... ");
-  Serial.print(TIME_TO_SLEEP);
+  Serial.print(sleepTime);
   Serial.println(" seconds");
   if (logging) {
     writeFile(SPIFFS, "/error.log", "Going to sleep for 10800 seconds \n");
@@ -9,7 +13,7 @@ void goToDeepSleep()
 
   if (DELAY_ONLY) {
     Serial.print("(Delaying only, no sleep)");
-    delay(TIME_TO_SLEEP * mS_TO_S_FACTOR);
+    delay(sleepTime * mS_TO_S_FACTOR);
     return;
   }
 
@@ -18,7 +22,7 @@ void goToDeepSleep()
   btStop();
 
   // Configure the timer to wake us up!
-  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
+  esp_sleep_enable_timer_wakeup(sleepTime * uS_TO_S_FACTOR);
 
   // Testpurposes
   //esp_sleep_enable_timer_wakeup(10 * uS_TO_S_FACTOR);
