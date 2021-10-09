@@ -77,22 +77,22 @@ int fertil_high = 351;
 // The firmware incorporates self-calibration. The default values below (used on first boot) are deliberately too tight, and will be adjusted based on observed extremes.
 //
 // To calibrate the device, first boot it when the unit is sitting completely dry on the table (zero humidity); you should see a line in the logs like:
-//     No soil calibration info saved; using defaults of 1700:3000
+//     No soil calibration info saved; using defaults of 1900:3000
 // followed later by:
 //     Raw soil data read before mapping: 3415 [...] value outside range, will raise soil_max
 // and finally by
 //     Spotted soil values outside calibration; saving
-// at the end of the cycle. This means that the new calibration extremes of e.g. 1700:3415 have been saved (you may wish to push the 'wake' button one or
+// at the end of the cycle. This means that the new calibration extremes of e.g. 1900:3415 have been saved (you may wish to push the 'wake' button one or
 // two times to get another couple of reads in case of variations/noise in the readings).
 //
 // You will then repeat the process, with the blade of the sensor submerged in water, to get the lowest ('wettest') reading calibrated also.
 //
-// Typical values might be around 1450:3350 after calibration, but can vary. A safeguard exists where values won't be updated outside 'ridiculous' extremes
+// Typical values might be around 1650:3450 after calibration, but can vary. A safeguard exists where values won't be updated outside 'ridiculous' extremes
 // (500-4000); if you have a device which actually reports outside this, you'll need to turn auto-calibration off at the top of this file, and update 
 // soil_min_default and soil_max_default below based on what you observe; they will then be the only values used.
 
 // Soil defaults - NO NEED TO CHANGE THESE if using auto-calibration.
-const int soil_min_default = 1700;
+const int soil_min_default = 1900;
 const int soil_max_default = 3000;
 
 // *******************************************************************************************************************************
