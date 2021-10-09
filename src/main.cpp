@@ -68,8 +68,7 @@ bool bme_found = false;
 //json construct setup
 struct Config
 {
-  String date;
-  String time;
+  String dateTime;
   int bootno;
   int sleep5no;
   float lux;
@@ -111,9 +110,6 @@ DS18B20 temp18B20(DS18B20_PIN);
 
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP);
-String formattedDate;
-String dayStamp;
-String timeStamp1;
 
 // Start Subroutines
 
@@ -144,16 +140,16 @@ void setup()
 
   Serial.println(WiFi.macAddress());
   Serial.println(WiFi.localIP());
-  //  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
-  //  timeClient.setTimeOffset(7200);
 
-  timeClient.setTimeOffset(gmtOffset_sec);
   while (!timeClient.update())
   {
     timeClient.forceUpdate();
   }
 
-#include <time-management.h>
+  // The formattedDate comes with the following format:
+  // 2018-05-28T16:00:13Z
+  config.dateTime = timeClient.getFormattedDate();
+
   //#include <battChargeDays.h>
   if (dht_found)
   {
@@ -266,12 +262,12 @@ void setup()
     config.batcharge = "charging";
     SPIFFS.remove("/batinfo.conf");
     epochChargeTime = timeClient.getEpochTime();
-    battChargeEpoc = String(epochChargeTime) + ":" + String(dayStamp);
+    battChargeEpoc = String(epochChargeTime) + "~" + String(config.dateTime);
     const char *batinfo_write = battChargeEpoc.c_str();
     writeFile(SPIFFS, "/batinfo.conf", batinfo_write);
-    Serial.println("dayStamp");
-    Serial.println(dayStamp);
-    config.batchargeDate = dayStamp;
+    Serial.print("Updating battery charge date to: ");
+    Serial.println(config.dateTime);
+    config.batchargeDate = config.dateTime;
   }
 
   Serial.println("Charge Epoc");

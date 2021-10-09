@@ -48,9 +48,6 @@ const char* ssid = ""; // no need to fill in
 const char* password = "password";
 const char* ntpServer = "pool.ntp.org";
 
-// Off-sets for time, and summertime. each hour is 3.600 seconds.
-const long  gmtOffset_sec = 3600;
-
 // Device configuration and name setting
 const String device_name = "Tgrow_HIGrow"; // Can be changed, but not necessary, as it will give no added value.
 

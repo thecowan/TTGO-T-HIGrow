@@ -65,16 +65,11 @@ def send_discovery_topics(msg):
             'unit_of_meas': "",
             'enabled_by_default': 'false',
         },
-        'date': {
-            'name': f"{d['plant']['sensorname']} Date",
-            'unit_of_meas': "",             
-            'icon': 'mdi:calendar'
-        },
-        'time': {
-            'name': f"{d['plant']['sensorname']} Time",
-            'unit_of_meas': "", 
-            'icon': 'mdi:clock-outline', 
-            'frc_upd':True
+        'dateTime': {
+            'name': f"{d['plant']['sensorname']} DateTime",
+            'unit_of_meas': "",
+            'device_class': 'timestamp',
+            'frc_upd':True,
         },
         'sleep5Count': {
             'name': f"{d['plant']['sensorname']} Sleep5count",
@@ -134,13 +129,13 @@ def send_discovery_topics(msg):
             'icon':'mdi:battery'
         }, 
         'batchargeDate': {
-            'name': f"{d['plant']['sensorname']} batchargeDate", 
+            'name': f"{d['plant']['sensorname']} Last Charged",
             'unit_of_meas': "", 
-            'icon':'mdi:calendar'
+            'device_class': 'timestamp',
         }, 
         'daysOnBattery': {
             'name': f"{d['plant']['sensorname']} daysOnBattery", 
-            'unit_of_meas': "days", 
+            'unit_of_meas': "d", 
             'icon':'mdi:calendar'
         }, 
         'wifissid': {
