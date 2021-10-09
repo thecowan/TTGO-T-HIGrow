@@ -125,7 +125,10 @@ NTPClient timeClient(ntpUDP);
 void setup()
 {
   Serial.begin(115200);
+  delay(1000);
   Serial.println("Void Setup");
+
+  esp_sleep_enable_ext0_wakeup((gpio_num_t)USER_BUTTON, 0);
 
 #include <module-parameter-management.h>
 
