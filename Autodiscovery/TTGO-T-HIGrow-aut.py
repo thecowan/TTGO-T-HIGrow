@@ -110,7 +110,7 @@ def send_discovery_topics(msg):
         },
         'salt': {
             'name': f"{d['plant']['sensorname']} Fertilizer",
-            'unit_of_meas': "%", 
+            'unit_of_meas': "μS/cm",
             'icon':'mdi:bottle-tonic'
         },
         'saltadvice': {
@@ -144,6 +144,12 @@ def send_discovery_topics(msg):
             'icon':'mdi:wifi',
             'enabled_by_default': 'false',
         }, 
+        'wifirssi': {
+            'name': f"{d['plant']['sensorname']} WIFI Signal Strength",
+            'unit_of_meas': "dBm",
+            'device_class': 'signal_strength',
+            'enabled_by_default': 'false',
+        },
         'pressure': {
             'name': f"{d['plant']['sensorname']} Pressure",
             'unit_of_meas': "Hpa", 

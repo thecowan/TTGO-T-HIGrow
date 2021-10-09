@@ -50,6 +50,7 @@ void saveConfiguration(const Config & config) {
   plant["pressure"] = config.pressure;
   plant["plantValveNo"] = plantValveNo;
   plant["wifissid"] = WiFi.SSID();
+  plant["wifirssi"] = WiFi.RSSI();
   plant["rel"] = config.rel;
 
   // Send to mqtt
