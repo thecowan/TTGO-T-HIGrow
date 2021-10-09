@@ -21,10 +21,7 @@ void saveConfiguration(const Config & config) {
   }
   const String topicStr = device_name + "/" + chipId;
   const char* topic = topicStr.c_str();
-  Serial.print("Publishing to topic ");
-  Serial.print(topic);
-  Serial.print(" via SSID ");
-  Serial.println(ssid);
+  Serial.printf("Publishing to topic %s via ssid %s\n", topic, ssid);
 
   StaticJsonDocument<1536> doc;
   // Set the values in the document

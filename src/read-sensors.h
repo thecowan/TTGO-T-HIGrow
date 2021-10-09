@@ -32,22 +32,15 @@ uint16_t readSoil()
 {
   uint16_t soil = analogRead(SOIL_PIN);
   uint16_t mapped = map(soil, soil_min, soil_max, 100, 0);
-  Serial.print("Raw soil data read before mapping: ");
-  Serial.print(soil);
-  Serial.print(", mapping to range ");
-  Serial.print(soil_min);
-  Serial.print(" (wet) - ");
-  Serial.print(soil_max);
-  Serial.print (" (dry); mapped to ");
+  String error = "";
   if (soil < soil_min) {
     mapped = 100;
-    Serial.println("100 (max); value outside range, consider lowering soil_min");
+    error = " (max); value outside range, consider lowering soil_min";
   } else if (soil > soil_max) {
     mapped = 0;
-    Serial.println("0 (min); value outside range, consider raising soil_max");
-  } else {
-    Serial.println(mapped);
+    error = " (min); value outside range, consider raising soil_max";
   }
+  Serial.printf("Raw soil data read before mapping: %i, mapping to range %i (wet) - %i (dry); mapped to %i%s\n", soil, soil_min, soil_max, mapped, error.c_str());
   return mapped;
 }
 
@@ -72,12 +65,10 @@ float readBattery()
 {
   int vref = 1100;
   uint16_t volt = analogRead(BAT_ADC);
-  Serial.print("Voltage reading (raw): ");
-  Serial.println(volt);
+  Serial.printf("Voltage reading (raw): %i\n", volt);
   config.batvolt = volt;
   float battery_voltage = ((float)volt / 4095.0) * 2.0 * 3.3 * (vref) / 1000;
-  Serial.print("Calculated Battery Voltage: ");
-  Serial.println(battery_voltage);
+  Serial.printf("Calculated Battery Voltage: %f\n", battery_voltage);
   config.batvoltage = battery_voltage;
   battery_voltage = battery_voltage * 100;
   return map(battery_voltage, 416, 290, 100, 0);

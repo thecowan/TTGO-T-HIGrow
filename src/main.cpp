@@ -135,10 +135,7 @@ void setup()
   // Start WiFi and update time
   connectToNetwork();
   Serial.println(" ");
-  Serial.print("Connected to network with MAC address ");
-  Serial.print(WiFi.macAddress());
-  Serial.print(", got IP address ");
-  Serial.println(WiFi.localIP());
+  Serial.printf("Connected to network with MAC address %s, got IP address %s\n", WiFi.macAddress().c_str(), WiFi.localIP().toString().c_str());
 
   if (logging)
   {
@@ -252,11 +249,7 @@ void setup()
   {
     advice = "too high";
   }
-  Serial.print("Raw salt reading ");
-  Serial.print(salt);
-  Serial.print("; advice '");
-  Serial.print(advice);
-  Serial.println("'");
+  Serial.printf("Raw salt reading %i; advice '%s'\n", salt, advice.c_str());
   config.saltadvice = advice;
 
   // Battery status, and charging status and days.
