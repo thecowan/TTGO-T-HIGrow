@@ -58,6 +58,16 @@ unsigned long epochChargeTime;
 float battChargeDateDivider = 86400;
 float daysOnBattery;
 
+String readString;
+const char* ssid = "";
+
+#define uS_TO_S_FACTOR 1000000ULL     //Conversion factor for micro seconds to seconds
+#define mS_TO_S_FACTOR 1000UL         //Conversion factor for milli seconds to seconds
+
+int soil_min = soil_min_default;
+int soil_max = soil_max_default;
+
+
 // Reboot counters
 RTC_DATA_ATTR int bootCount = 0;
 RTC_DATA_ATTR int sleep5no = 0;
@@ -74,6 +84,7 @@ struct Config
   float lux;
   float temp;
   float humid;
+  uint16_t rawSoil;
   float soil;
   float soilTemp;
   float salt;
@@ -119,7 +130,7 @@ NTPClient timeClient(ntpUDP);
 #include <read-sensors.h>
 #include <save-configuration.h>
 #include <connect-to-network.h>
-#include <read-batt-info.h>
+#include <config-store.h>
 #include <floatConv.h>
 
 void setup()
@@ -226,7 +237,9 @@ void setup()
   }
 
   uint16_t soil = readSoil();
-  config.soil = soil;
+  config.rawSoil = soil;
+  config.soil = mapSoil(soil);
+
   float soilTemp = readSoilTemp();
   config.soilTemp = soilTemp;
 
@@ -307,6 +320,22 @@ void setup()
     writeFile(SPIFFS, "/error.log", "Creating JSON document...! \n");
   }
   saveConfiguration(config);
+
+  if (auto_calibrate && (config.rawSoil > soil_max || config.rawSoil < soil_min)) {
+    Serial.println(F("Spotted soil values outside calibration; saving"));
+    // Put some guards around extreme values, unless they've been overridden in config
+    if (config.rawSoil < 500 || config.rawSoil > 4000) {
+      Serial.println(F("Skipping update, values seem faulty; please calibrate manually"));
+    } else {
+      if (config.rawSoil > soil_max) {
+        soil_max = config.rawSoil;
+      }
+      if (config.rawSoil < soil_min) {
+        soil_min = config.rawSoil;
+      }
+      write_soil_calibration();
+    }
+  }
 
   // Go to sleep
   //Increment boot number and print it every reboot

@@ -42,3 +42,4 @@ if (logging)
 }
 
 read_batt_info();
+read_soil_calibration();
