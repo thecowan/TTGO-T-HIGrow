@@ -31,14 +31,24 @@ uint32_t readSalt()
 uint16_t readSoil()
 {
   uint16_t soil = analogRead(SOIL_PIN);
-  Serial.print("Raw soild data read before mapping: ");
+  uint16_t mapped = map(soil, soil_min, soil_max, 100, 0);
+  Serial.print("Raw soil data read before mapping: ");
   Serial.print(soil);
   Serial.print(", mapping to range ");
   Serial.print(soil_min);
   Serial.print(" (wet) - ");
   Serial.print(soil_max);
-  Serial.println(" (dry)");
-  return map(soil, soil_min, soil_max, 100, 0);
+  Serial.print (" (dry); mapped to ");
+  if (soil < soil_min) {
+    mapped = 100;
+    Serial.println("100 (max); value outside range, consider lowering soil_min");
+  } else if (soil > soil_max) {
+    mapped = 0;
+    Serial.println("0 (min); value outside range, consider raising soil_max");
+  } else {
+    Serial.println(mapped);
+  }
+  return mapped;
 }
 
 float readSoilTemp()
