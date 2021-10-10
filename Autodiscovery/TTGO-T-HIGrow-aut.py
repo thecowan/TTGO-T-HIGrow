@@ -51,121 +51,137 @@ def send_discovery_topics(msg):
         'identifiers': [f"{d['plant']['Tgrow_HIGrow']}"],
         'manufacturer': "LILYGO, programmed by Per Rose",
         'model':'TTGO T-Higrow',   
-        'name':  d['plant']['sensorname'],
-        'sw_version':  d['plant']['rel']
+        'name':  d['plant']['sensor_name'],
+        'sw_version':  d['plant']['release_version']
     }
     entity_payloads = {
+
+
         'Tgrow_HIGrow': {
-            'name': f"{d['plant']['sensorname']} Mac-ID",
+            'name': f"{d['plant']['sensor_name']} Mac ID",
             'unit_of_meas': "",
             'enabled_by_default': 'false',
         },
-        'sensorname': {
-            'name': f"{d['plant']['sensorname']}",
+        'sensor_name': {
+            'name': f"{d['plant']['sensor_name']} Sensor Name",
             'unit_of_meas': "",
             'enabled_by_default': 'false',
         },
-        'dateTime': {
-            'name': f"{d['plant']['sensorname']} DateTime",
+        'last_updated': {
+            'name': f"{d['plant']['sensor_name']} Last Updated",
             'unit_of_meas': "",
             'device_class': 'timestamp',
             'frc_upd':True,
         },
-        'sleep5Count': {
-            'name': f"{d['plant']['sensorname']} Sleep5count",
+        'valve_number': {
+            'name': f"{d['plant']['sensor_name']} Valve Number",
             'unit_of_meas': "", 
-            'icon':'mdi:counter',
             'enabled_by_default': 'false',
         }, 
-        'bootCount': {
-            'name': f"{d['plant']['sensorname']} Bootcount",
-            'unit_of_meas': "", 
-            'icon':'mdi:counter',
-            'enabled_by_default': 'false',
-        }, 
+
+
         'lux': {
-            'name': f"{d['plant']['sensorname']} Lux",
+            'name': f"{d['plant']['sensor_name']} Lux",
             'unit_of_meas': "lx", 
             'device_class': 'illuminance',
         }, 
-        'temp': {
-            'name': f"{d['plant']['sensorname']} Temperature",
+        'temperature': {
+            'name': f"{d['plant']['sensor_name']} Temperature",
             'unit_of_meas': "°C",
             'device_class': 'temperature',
         }, 
-        'humid': {
-            'name': f"{d['plant']['sensorname']} Humidity",
+        'humidity': {
+            'name': f"{d['plant']['sensor_name']} Humidity",
             'unit_of_meas': "%", 
             'device_class': 'humidity',
         }, 
-        'soil': {
-            'name': f"{d['plant']['sensorname']} Soil",
+        'pressure': {
+            'name': f"{d['plant']['sensor_name']} Pressure",
+            'unit_of_meas': "hPa",
+            'device_class': 'pressure',
+        },
+
+
+        # Skipped as uninteresting: raw_soil_moisture
+        'soil_moisture': {
+            'name': f"{d['plant']['sensor_name']} Soil Moisture",
             'unit_of_meas': "%", 
             'device_class': 'humidity',
         }, 
-        'soilTemp': {
-            'name': f"{d['plant']['sensorname']} SoilTemp",
+        'soil_temperature': {
+            'name': f"{d['plant']['sensor_name']} Soil Temperature",
             'unit_of_meas': "°C",
             'device_class': 'temperature',
         },
-        'salt': {
-            'name': f"{d['plant']['sensorname']} Fertilizer",
+        # Skipped as uninteresting: raw_soil_conductivity
+        'soil_conductivity': {
+            'name': f"{d['plant']['sensor_name']} Soil Conductivity",
             'unit_of_meas': "μS/cm",
             'icon':'mdi:bottle-tonic'
         },
-        'saltadvice': {
-            'name': f"{d['plant']['sensorname']} Fertilize state",
+        'salt_advice': {
+            'name': f"{d['plant']['sensor_name']} Fertilizer State",
             'unit_of_meas': "", 
-            'icon':'mdi:alpha-i-circle-outline'
+            'icon':'mdi:emoticon-poop'
         },
-        'bat': {
-            'name': f"{d['plant']['sensorname']} Battery",
+
+
+        # Skipped as uninteresting: raw_battery_voltage
+        'battery_voltage': {
+            'name': f"{d['plant']['sensor_name']} Battery Voltage",
+            'unit_of_meas': "V",
+            'device_class': 'battery',
+            'icon':'mdi:flash'
+        },
+        'battery_percentage': {
+            'name': f"{d['plant']['sensor_name']} Battery",
             'unit_of_meas': "%", 
             'device_class': 'battery',
         }, 
-        'batcharge': {
-            'name': f"{d['plant']['sensorname']} Charging",
+        'battery_charge_state': {
+            'name': f"{d['plant']['sensor_name']} Charge State",
             'unit_of_meas': "", 
             'icon':'mdi:battery'
         }, 
-        'batchargeDate': {
-            'name': f"{d['plant']['sensorname']} Last Charged",
+        'battery_last_charged': {
+            'name': f"{d['plant']['sensor_name']} Last Charged",
             'unit_of_meas': "", 
             'device_class': 'timestamp',
         }, 
-        'daysOnBattery': {
-            'name': f"{d['plant']['sensorname']} daysOnBattery", 
-            'unit_of_meas': "d", 
-            'icon':'mdi:calendar'
+
+
+        'boot_count': {
+            'name': f"{d['plant']['sensor_name']} Boot Count",
+            'unit_of_meas': "", 
+            'icon':'mdi:counter',
+            'enabled_by_default': 'false',
         }, 
-        'wifissid': {
-            'name': f"{d['plant']['sensorname']} WIFI",
+        'sleep_5_count': {
+            'name': f"{d['plant']['sensor_name']} Sleep5 Count",
+            'unit_of_meas': "", 
+            'icon':'mdi:counter',
+            'enabled_by_default': 'false',
+        }, 
+        'release_version': {
+            'name': f"{d['plant']['sensor_name']} Release Version",
+            'unit_of_meas': "", 
+            'icon':'mdi:counter',
+            'enabled_by_default': 'false',
+        }, 
+
+
+        'wifi_ssid': {
+            'name': f"{d['plant']['sensor_name']} WiFi SSID",
             'unit_of_meas': "", 
             'icon':'mdi:wifi',
             'enabled_by_default': 'false',
         }, 
-        'wifirssi': {
-            'name': f"{d['plant']['sensorname']} WIFI Signal Strength",
+        'wifi_rssi': {
+            'name': f"{d['plant']['sensor_name']} WiFi Signal Strength",
             'unit_of_meas': "dBm",
             'device_class': 'signal_strength',
             'enabled_by_default': 'false',
         },
-        'pressure': {
-            'name': f"{d['plant']['sensorname']} Pressure",
-            'unit_of_meas': "Hpa", 
-            'device_class': 'pressure',
-        }, 
-        'plantValveNo': {
-            'name': f"{d['plant']['sensorname']} plantValveNo",
-            'unit_of_meas': "", 
-            'enabled_by_default': 'false',
-        }, 
-        'rel': {
-            'name': f"{d['plant']['sensorname']} Release",
-            'unit_of_meas': "", 
-            'icon':'mdi:counter',
-            'enabled_by_default': 'false',
-        }, 
     }
     
     for entity, entity_payload in entity_payloads.items():
@@ -181,7 +197,7 @@ def send_discovery_topics(msg):
         client.publish(
             entity_topic,
             payload=json.dumps(entity_payload),
-            qos=1, 
+            qos=1,
             retain=True
         )
 
@@ -194,7 +210,12 @@ def on_message(client, userdata, msg):
     print("Body: " +str(msg.payload))
     d = json.loads(msg.payload)
     mac_id=d["plant"]["Tgrow_HIGrow"]
-    name=d["plant"]["sensorname"]
+    try:
+      name=d["plant"]["sensor_name"]
+    except KeyError:
+      print("Device with MAC ID %s using legacy format, skipping" % (mac_id, ))
+      return
+      
     yaml_data = read_yaml_file(mac_id,  name)
 
     if yaml_data == False:
