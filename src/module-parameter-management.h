@@ -15,6 +15,13 @@ if (logging)
 
 listDir(SPIFFS, "/", 0);
 
+if (wipeSavedState) {
+  Serial.println("Erasing soil calibration file");
+  SPIFFS.remove("/soilcalib.conf");
+  Serial.println("Erasing battery charge info");
+  SPIFFS.remove("/batinfo.conf");
+}
+
 if (logging)
 {
   writeFile(SPIFFS, "/error.log", "After listDir \n");

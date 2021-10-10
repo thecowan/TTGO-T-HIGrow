@@ -70,6 +70,10 @@ int fertil_low = 201;
 int fertil_opt = 251;
 int fertil_high = 351;
 
+// Only set to true during development, if file format has changed and you need to wipe all saved state
+const bool wipeSavedState = false;
+
+
 // *******************************************************************************************************************************
 // *** CALIBRATION INFORMATION - auto-calibrate each device before deploying!
 // *******************************************************************************************************************************

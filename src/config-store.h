@@ -3,7 +3,7 @@
 void read_batt_info()
 {
     readFile(SPIFFS, "/batinfo.conf");
-    Serial.printf("Last charge info (epoch~date) from stored file: %s\n", readString.c_str());
+    Serial.printf("Last charge date from stored file: %s\n", readString.c_str());
     config.batteryLastCharged = readString;
     readString = "";
 }
