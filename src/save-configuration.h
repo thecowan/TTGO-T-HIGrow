@@ -29,29 +29,38 @@ void saveConfiguration(const Config & config) {
   JsonObject root = doc.to<JsonObject>();
 
   JsonObject plant = root.createNestedObject("plant");
+
   plant[device_name] = chipId;
-  plant["sensorname"] = plant_name;
-  plant["dateTime"] = config.dateTime;
-  plant["sleep5Count"] = config.sleep5no;
-  plant["bootCount"] = config.bootno;
+  plant["sensor_name"] = plant_name;
+  plant["last_updated"] = config.dateTime;
+  plant["valve_number"] = plantValveNo;
+
   plant["lux"] = config.lux;
-  plant["temp"] = config.temp;
-  plant["humid"] = config.humid;
-  plant["soil"] = config.soil;
-  plant["soilTemp"] = config.soilTemp;
-  plant["salt"] = config.salt;
-  plant["saltadvice"] = config.saltadvice;
-  plant["bat"] = config.bat;
-  plant["batcharge"] = config.batcharge;
-  plant["batchargeDate"] = config.batchargeDate;
-  plant["daysOnBattery"] = config.daysOnBattery;
-  plant["battvolt"] = config.batvolt;
-  plant["battvoltage"] = config.batvoltage;
+  plant["temperature"] = config.temperature;
+  plant["humidity"] = config.humidity;
   plant["pressure"] = config.pressure;
-  plant["plantValveNo"] = plantValveNo;
-  plant["wifissid"] = WiFi.SSID();
-  plant["wifirssi"] = WiFi.RSSI();
-  plant["rel"] = config.rel;
+
+  plant["raw_soil_moisture"] = config.rawSoilMoisture;
+  plant["soil_moisture"] = config.soilMoisture;
+
+  plant["soil_temperature"] = config.soilTemperature;
+
+  plant["raw_soil_conductivity"] = config.rawSoilConductivity;
+  plant["soil_conductivity"] = config.soilConductivity;
+  plant["salt_advice"] = config.saltAdvice;
+
+  plant["raw_battery_voltage"] = config.rawBatteryVoltage;
+  plant["battery_voltage"] = config.batteryVoltage;
+  plant["battery_percentage"] = config.batteryPercentage;
+  plant["battery_charge_state"] = config.batteryChargeState;
+  plant["battery_last_charged"] = config.batteryLastCharged;
+
+  plant["boot_count"] = config.bootCount;
+  plant["sleep_5_count"] = config.sleep5Count;
+  plant["release_version"] = config.release;
+
+  plant["wifi_ssid"] = WiFi.SSID();
+  plant["wifi_rssi"] = WiFi.RSSI();
 
   // Send to mqtt
   char buffer[1536];

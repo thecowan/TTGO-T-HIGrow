@@ -1,7 +1,7 @@
 void goToDeepSleep()
 {
   int sleepTime = TIME_TO_SLEEP;
-  if (config.batcharge.equals("charging")) {
+  if (config.batteryChargeState.equals("charging")) {
     sleepTime = TIME_TO_SLEEP_IF_CHARGING;
   }
   Serial.print("Going to sleep for ");

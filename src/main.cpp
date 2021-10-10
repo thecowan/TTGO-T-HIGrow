@@ -51,13 +51,6 @@ const String rel = "4.3.2"; // Corrected an error in DST.
 WiFiClient wifiClient;
 PubSubClient mqttClient(wifiClient);
 
-// Date calculator
-unsigned long epochTime;
-String battChargeEpoc;
-unsigned long epochChargeTime;
-float battChargeDateDivider = 86400;
-float daysOnBattery;
-
 String readString;
 const char* ssid = "";
 
@@ -79,24 +72,24 @@ bool bme_found = false;
 struct Config
 {
   String dateTime;
-  int bootno;
-  int sleep5no;
   float lux;
-  float temp;
-  float humid;
-  uint16_t rawSoil;
-  float soil;
-  float soilTemp;
-  float salt;
-  String saltadvice;
-  float bat;
-  String batcharge;
-  String batchargeDate;
-  float daysOnBattery;
-  float batvolt;
-  float batvoltage;
+  float temperature;
+  float humidity;
   float pressure;
-  String rel;
+  uint16_t rawSoilMoisture;
+  float soilMoisture;
+  float soilTemperature;
+  float rawSoilConductivity;
+  int soilConductivity;
+  String saltAdvice;
+  float rawBatteryVoltage;
+  float batteryVoltage;
+  float batteryPercentage;
+  String batteryChargeState;
+  String batteryLastCharged;
+  int bootCount;
+  int sleep5Count;
+  String release;
 };
 Config config;
 
@@ -218,33 +211,36 @@ void setup()
   if (dht_found)
   {
     float t12 = dht.readTemperature(); // Read temperature as Fahrenheit then dht.readTemperature(true)
-    config.temp = t12;
+    config.temperature = t12;
     delay(2000);
     float h12 = dht.readHumidity();
-    config.humid = h12;
+    config.humidity = h12;
   }
 
   if (bme_found)
   {
     float bme_temp = bmp.readTemperature();
-    config.temp = bme_temp;
+    config.temperature = bme_temp;
 
     float bme_humid = bmp.readHumidity();
-    config.humid = bme_humid;
+    config.humidity = bme_humid;
 
     float bme_pressure = (bmp.readPressure() / 100.0F);
     config.pressure = bme_pressure;
   }
 
   uint16_t soil = readSoil();
-  config.rawSoil = soil;
-  config.soil = mapSoil(soil);
+  config.rawSoilMoisture = soil;
+  config.soilMoisture = mapSoil(soil);
 
   float soilTemp = readSoilTemp();
-  config.soilTemp = soilTemp;
+  config.soilTemperature = soilTemp;
 
-  uint32_t salt = readSalt();
-  config.salt = salt;
+  uint32_t rawSalt = readSalt();
+  config.rawSoilConductivity = rawSalt;
+  // Unil we work out how to scale it
+  uint32_t salt = rawSalt;
+  config.soilConductivity = salt;
   String advice;
   if (salt < fertil_needed)
   {
@@ -263,55 +259,36 @@ void setup()
     advice = "too high";
   }
   Serial.printf("Raw salt reading %i; advice '%s'\n", salt, advice.c_str());
-  config.saltadvice = advice;
+  config.saltAdvice = advice;
 
   // Battery status, and charging status and days.
   float bat = readBattery();
-  config.bat = bat;
-  config.batcharge = "";
+  config.batteryPercentage = bat;
+  config.batteryChargeState = "";
   Serial.print("Battery level: ");
   Serial.println(bat);
   if (bat > 130)
   {
-    config.batcharge = "charging";
+    config.batteryChargeState = "charging";
     SPIFFS.remove("/batinfo.conf");
-    epochChargeTime = timeClient.getEpochTime();
-    battChargeEpoc = String(epochChargeTime) + "~" + String(config.dateTime);
-    const char *batinfo_write = battChargeEpoc.c_str();
-    writeFile(SPIFFS, "/batinfo.conf", batinfo_write);
+    writeFile(SPIFFS, "/batinfo.conf", config.dateTime.c_str());
     Serial.print("Updating battery charge date to: ");
     Serial.println(config.dateTime);
-    config.batchargeDate = config.dateTime;
+    config.batteryLastCharged = config.dateTime;
   }
-
-  Serial.print("Charge Epoch: ");
-  Serial.println(battChargeEpoc);
-  unsigned long epochTime = timeClient.getEpochTime();
-  Serial.print("Test Epoc: ");
-  Serial.println(epochTime);
-  epochChargeTime = battChargeEpoc.toInt();
-  Serial.print("Seconds since last charge: ");
-  Serial.println(epochTime - epochChargeTime);
-  float epochTimeFl = float(epochTime);
-  float epochChargeTimeFl = float(epochChargeTime); 
   
-
-  daysOnBattery = (epochTimeFl - epochChargeTimeFl) / battChargeDateDivider;
-  daysOnBattery = truncate(daysOnBattery, 1);
-  config.daysOnBattery = daysOnBattery;
-
   if (bat > 100)
   {
-    config.bat = 100;
+    config.batteryPercentage = 100;
   }
 
-  config.bootno = bootCount;
+  config.bootCount = bootCount;
 
   luxRead = lightMeter.readLightLevel();
   Serial.print("Lux reading: ");
   Serial.println(luxRead);
   config.lux = luxRead;
-  config.rel = rel;
+  config.release = rel;
 
   // Create JSON file
   Serial.println(F("Creating JSON document..."));
@@ -321,17 +298,17 @@ void setup()
   }
   saveConfiguration(config);
 
-  if (auto_calibrate && (config.rawSoil > soil_max || config.rawSoil < soil_min)) {
+  if (auto_calibrate && (config.rawSoilMoisture > soil_max || config.rawSoilMoisture < soil_min)) {
     Serial.println(F("Spotted soil values outside calibration; saving"));
     // Put some guards around extreme values, unless they've been overridden in config
-    if (config.rawSoil < 500 || config.rawSoil > 4000) {
+    if (config.rawSoilMoisture < 500 || config.rawSoilMoisture > 4000) {
       Serial.println(F("Skipping update, values seem faulty; please calibrate manually"));
     } else {
-      if (config.rawSoil > soil_max) {
-        soil_max = config.rawSoil;
+      if (config.rawSoilMoisture > soil_max) {
+        soil_max = config.rawSoilMoisture;
       }
-      if (config.rawSoil < soil_min) {
-        soil_min = config.rawSoil;
+      if (config.rawSoilMoisture < soil_min) {
+        soil_min = config.rawSoilMoisture;
       }
       write_soil_calibration();
     }

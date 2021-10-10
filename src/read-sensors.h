@@ -71,10 +71,10 @@ float readBattery()
   int vref = 1100;
   uint16_t volt = analogRead(BAT_ADC);
   Serial.printf("Voltage reading (raw): %i\n", volt);
-  config.batvolt = volt;
+  config.rawBatteryVoltage = volt;
   float battery_voltage = ((float)volt / 4095.0) * 2.0 * 3.3 * (vref) / 1000;
   Serial.printf("Calculated Battery Voltage: %f\n", battery_voltage);
-  config.batvoltage = battery_voltage;
+  config.batteryVoltage = battery_voltage;
   battery_voltage = battery_voltage * 100;
   return map(battery_voltage, 416, 290, 100, 0);
 }
